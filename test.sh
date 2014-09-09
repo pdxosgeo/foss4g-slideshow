@@ -7,9 +7,12 @@ BAR="bar.png"
 QR="qr.png"
 OUT="out/$1"
 TEXTCOLOR="white"
-FONT="Arvo.ttf"
-POINT=42
-BLUR=20
+STROKECOLOR="black"
+LARGEFONT="Arvo-Bold.ttf"
+SMALLFONT="Arvo.ttf"
+LARGEPOINT=50
+SMALLPOINT=45
+BLUR=5
 
 #
 # composite blur under bar
@@ -41,4 +44,5 @@ convert $OUT -page +$QX+$QY $QR -flatten $OUT
 # add text
 #
 let "TY = $BY + 85"
-convert $OUT -pointsize $POINT -font $FONT -fill $TEXTCOLOR -annotate +$MARGIN+$TY "Map Title\n\nAuthor 1\nAuthor 2\n\nProject Name\n\n@Twitter" $OUT
+convert $OUT -pointsize $LARGEPOINT -font $LARGEFONT -fill $TEXTCOLOR -stroke black -strokewidth 1 -annotate +$MARGIN+$TY "Current and Proposed Mining, Energy, Forestry Development in Northwest BC" \
+-pointsize $SMALLPOINT -font $SMALLFONT -fill $TEXTCOLOR -stroke black -strokewidth 1 -annotate +$MARGIN+$TY "\n\nAuthor: Gard\n@FOSS4G_INSPIRE" +append $OUT
