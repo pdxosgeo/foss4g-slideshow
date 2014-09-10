@@ -1,2 +1,0 @@
-brew install qrencode
-qrencode -o out.png -s 10 -m 2 http://mapbox.com

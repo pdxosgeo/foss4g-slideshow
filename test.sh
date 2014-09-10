@@ -1,11 +1,17 @@
 #!/bin/sh
 
-PATH="/usr/bin:/usr/local/bin"
+PATH="/bin:/usr/bin:/usr/local/bin"
 
-MAP="in/$1"
+IMG=$1
+URL=$2
+TITLE=$3
+NAME=$4
+TWITTER=$5
+
+MAP="in/$IMG"
 BAR="bar.png"
-QR="qr.png"
-OUT="out/$1"
+QR="qr/$IMG"
+OUT="out/$IMG"
 TEXTCOLOR="white"
 STROKECOLOR="black"
 LARGEFONT="Arvo-Bold.ttf"
@@ -32,6 +38,7 @@ convert $OUT -page +0+$BY $BAR -flatten $OUT
 #
 # add QR code
 #
+qrencode -o $QR -s 10 -m 2 $URL
 MAP_WIDTH=$( identify $MAP | awk '{ print $3 }' | awk -F 'x' '{ print $1 }' )
 QR_SIZE=$( identify $QR | awk '{ print $3 }' | awk -F 'x' '{ print $1 }')
 let "GAP = $BAR_HEIGHT - $QR_SIZE"
@@ -44,5 +51,22 @@ convert $OUT -page +$QX+$QY $QR -flatten $OUT
 # add text
 #
 let "TY = $BY + 85"
-convert $OUT -pointsize $LARGEPOINT -font $LARGEFONT -fill $TEXTCOLOR -stroke black -strokewidth 1 -annotate +$MARGIN+$TY "Current and Proposed Mining, Energy, Forestry Development in Northwest BC" \
--pointsize $SMALLPOINT -font $SMALLFONT -fill $TEXTCOLOR -stroke black -strokewidth 1 -annotate +$MARGIN+$TY "\n\nAuthor: Gard\n@FOSS4G_INSPIRE" +append $OUT
+convert $OUT \
+    -pointsize $LARGEPOINT \
+    -font $LARGEFONT \
+    -fill $TEXTCOLOR \
+    -stroke black \
+    -strokewidth 1 \
+    -annotate +$MARGIN+$TY "$TITLE" \
+    -pointsize $SMALLPOINT \
+    -font $SMALLFONT \
+    -fill $TEXTCOLOR \
+    -stroke black \
+    -strokewidth 1 \
+    -annotate +$MARGIN+$TY "\n\nAuthor: ${NAME}\n\n${TWITTER}" \
+    +append $OUT
+
+#
+# clean up
+#
+rm -f ${OUT}~*
